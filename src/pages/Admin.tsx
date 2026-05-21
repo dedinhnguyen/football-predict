@@ -304,7 +304,7 @@ const Admin: React.FC = () => {
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors">
               <ArrowLeft className="h-4 w-4" />
-              <span>{t('backToHome')}</span>
+              <span className="hidden sm:inline">{t('backToHome')}</span>
             </Link>
           </div>
 
@@ -312,11 +312,11 @@ const Admin: React.FC = () => {
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
-              className="flex h-9 items-center justify-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 text-xs font-bold text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-all duration-200"
+              className="flex h-9 items-center justify-center gap-1 rounded-lg border border-white/5 bg-white/5 px-2 sm:px-2.5 text-xs font-bold text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-all duration-200"
               title={language === 'vi' ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
             >
               <Globe className="h-4 w-4" />
-              <span>{language === 'vi' ? 'VI' : 'EN'}</span>
+              <span className="hidden sm:inline">{language === 'vi' ? 'VI' : 'EN'}</span>
             </button>
 
             {/* Theme Toggle */}
@@ -328,9 +328,9 @@ const Admin: React.FC = () => {
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
 
-            <div className="flex items-center gap-2 text-purple-400 font-semibold text-xs border border-purple-500/30 bg-purple-500/10 px-3 py-1 rounded-full">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-purple-400 font-semibold text-[10px] sm:text-xs border border-purple-500/30 bg-purple-500/10 px-2.5 sm:px-3 py-1 rounded-full">
               <ShieldAlert className="h-3.5 w-3.5" />
-              <span>{t('adminMode')}</span>
+              <span className="hidden sm:inline">{t('adminMode')}</span>
             </div>
           </div>
         </div>
@@ -394,11 +394,11 @@ const Admin: React.FC = () => {
               <table className="w-full text-left text-xs border-collapse">
                 <thead className="bg-white/[0.02] text-slate-400 font-semibold border-b border-white/5 uppercase tracking-wider">
                   <tr>
-                    <th className="px-6 py-4">{t('thAdminTime')}</th>
-                    <th className="px-6 py-4 text-center">{t('thAdminMatchHandicap')}</th>
-                    <th className="px-6 py-4">{t('thAdminStatus')}</th>
-                    <th className="px-6 py-4">{t('thAdminResult')}</th>
-                    <th className="px-6 py-4 text-right">{t('thAdminActions')}</th>
+                    <th className="px-2 sm:px-6 py-3 sm:py-4">{t('thAdminTime')}</th>
+                    <th className="px-2 sm:px-6 py-3 sm:py-4 text-center">{t('thAdminMatchHandicap')}</th>
+                    <th className="px-2 sm:px-6 py-3 sm:py-4">{t('thAdminStatus')}</th>
+                    <th className="px-2 sm:px-6 py-3 sm:py-4">{t('thAdminResult')}</th>
+                    <th className="px-2 sm:px-6 py-3 sm:py-4 text-right">{t('thAdminActions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 text-slate-300">
@@ -411,48 +411,48 @@ const Admin: React.FC = () => {
                   ) : (
                     matches.map((match) => (
                       <tr key={match.id} className="hover:bg-white/[0.01] transition-colors">
-                        <td className="px-6 py-4 font-mono text-slate-400">
+                        <td className="px-2 sm:px-6 py-3 sm:py-4 font-mono text-slate-400">
                           {formatMatchTime(match.matchTime)}
                         </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center gap-3">
-                            <div className="flex items-center gap-2 justify-end w-28">
-                              <span className="font-semibold text-right truncate">{match.homeTeam.name}</span>
-                              <img src={match.homeTeam.logoUrl} alt="" className="h-6 w-6 object-contain" />
+                        <td className="px-2 sm:px-6 py-3 sm:py-4">
+                          <div className="flex items-center justify-center gap-1.5 sm:gap-3">
+                            <div className="flex items-center gap-1.5 sm:gap-2 justify-end w-20 sm:w-28">
+                              <span className="font-semibold text-right truncate text-[11px] sm:text-xs">{match.homeTeam.name}</span>
+                              <img src={match.homeTeam.logoUrl} alt="" className="h-5 w-5 sm:h-6 sm:w-6 object-contain" />
                             </div>
-                            <span className="rounded bg-slate-800 px-2 py-0.5 font-bold text-[10px] text-yellow-400">
+                            <span className="rounded bg-slate-800 px-1.5 sm:px-2 py-0.5 font-bold text-[9px] sm:text-[10px] text-yellow-400 shrink-0">
                               {match.handicap === 0 ? t('hoaKeoLabel') : t('handicapLabel', { val: match.handicap })}
                             </span>
-                            <div className="flex items-center gap-2 w-28">
-                              <img src={match.awayTeam.logoUrl} alt="" className="h-6 w-6 object-contain" />
-                              <span className="font-semibold truncate">{match.awayTeam.name}</span>
+                            <div className="flex items-center gap-1.5 sm:gap-2 w-20 sm:w-28">
+                              <img src={match.awayTeam.logoUrl} alt="" className="h-5 w-5 sm:h-6 sm:w-6 object-contain" />
+                              <span className="font-semibold truncate text-[11px] sm:text-xs">{match.awayTeam.name}</span>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-2 sm:px-6 py-3 sm:py-4">
                           {match.status === 'scheduled' && (
-                            <span className="rounded-full bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 text-[10px] font-bold text-blue-400">
+                            <span className="rounded-full bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-blue-400">
                               {t('statusScheduled')}
                             </span>
                           )}
                           {match.status === 'live' && (
-                            <span className="rounded-full bg-red-500/15 border border-red-500/30 px-2.5 py-0.5 text-[10px] font-bold text-red-400 animate-pulse">
+                            <span className="rounded-full bg-red-500/15 border border-red-500/30 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-red-400 animate-pulse">
                               {t('statusLive')}
                             </span>
                           )}
                           {match.status === 'completed' && (
-                            <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400">
+                            <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-emerald-400">
                               {t('statusCompleted')}
                             </span>
                           )}
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-2 sm:px-6 py-3 sm:py-4">
                           {match.status === 'completed' && match.result ? (
                             <div className="flex flex-col gap-0.5">
-                              <span className="font-bold text-slate-100 font-mono text-sm">
+                              <span className="font-bold text-slate-100 font-mono text-xs sm:text-sm">
                                 {match.result.homeScore} - {match.result.awayScore}
                               </span>
-                              <span className="text-[10px] text-slate-500 font-medium">
+                              <span className="text-[9px] sm:text-[10px] text-slate-500 font-medium">
                                 {t('actualWinnerLabel')}: <span className="text-purple-400 capitalize">{
                                   match.result.winningKeeo === 'home' ? t('choiceHome') :
                                   match.result.winningKeeo === 'away' ? t('choiceAway') : t('choiceDraw')
@@ -463,26 +463,26 @@ const Admin: React.FC = () => {
                             <span className="text-slate-500 italic">-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
+                        <td className="px-2 sm:px-6 py-3 sm:py-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5 sm:gap-2">
                             {match.status === 'scheduled' && (
                               <button
                                 onClick={() => handleStartLive(match.id!)}
-                                className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
+                                className="flex items-center gap-1 rounded-lg bg-blue-600 px-2 sm:px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-500 transition-colors shadow-sm"
                                 title={t('btnLive')}
                               >
                                 <Play className="h-3 w-3" />
-                                <span>{t('btnLive')}</span>
+                                <span className="hidden sm:inline">{t('btnLive')}</span>
                               </button>
                             )}
                             {match.status === 'live' && (
                               <button
                                 onClick={() => openCompleteModal(match.id!)}
-                                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors shadow-sm"
+                                className="flex items-center gap-1 rounded-lg bg-emerald-600 px-2 sm:px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors shadow-sm"
                                 title={t('btnComplete')}
                               >
                                 <Check className="h-3 w-3" />
-                                <span>{t('btnComplete')}</span>
+                                <span className="hidden sm:inline">{t('btnComplete')}</span>
                               </button>
                             )}
                             <button
@@ -505,7 +505,7 @@ const Admin: React.FC = () => {
 
         {/* Tab CONTENT 2: Add Match Form */}
         {activeTab === 'add' && (
-          <div className="glass-panel max-w-2xl mx-auto rounded-xl p-8 shadow-lg relative">
+          <div className="glass-panel max-w-2xl mx-auto rounded-xl p-5 sm:p-8 shadow-lg relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-500 to-pink-500 opacity-60" />
             <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
               <Calendar className="h-5 w-5 text-purple-400" />
@@ -653,7 +653,7 @@ const Admin: React.FC = () => {
 
         {/* Tab CONTENT 3: Settings Form */}
         {activeTab === 'settings' && (
-          <div className="glass-panel max-w-2xl mx-auto rounded-xl p-8 shadow-lg relative">
+          <div className="glass-panel max-w-2xl mx-auto rounded-xl p-5 sm:p-8 shadow-lg relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple-500 to-indigo-500 opacity-60" />
             <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
               <SettingsIcon className="h-5 w-5 text-purple-400" />
@@ -746,7 +746,7 @@ const Admin: React.FC = () => {
       {/* MODAL: Complete Match Dialog */}
       {showCompModal && selectedMatchId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="glass-panel w-full max-w-md rounded-2xl p-6 shadow-2xl relative border border-white/10">
+          <div className="glass-panel w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl relative border border-white/10">
             <h3 className="text-base font-bold text-white mb-6 flex items-center gap-2">
               <Check className="h-5 w-5 text-emerald-400" />
               <span>{t('modalHeader')}</span>

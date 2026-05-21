@@ -61,7 +61,7 @@ const Login: React.FC = () => {
       <div className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-purple-500/10 blur-[130px]" />
 
       {/* Main Glassmorphic Card */}
-      <div className="glass-panel w-full max-w-md rounded-2xl p-8 text-center shadow-2xl relative overflow-hidden transition-all duration-500">
+      <div className="glass-panel w-full max-w-md rounded-2xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden transition-all duration-500">
         
         {/* Glow Header Border */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-purple-500 opacity-70" />
@@ -72,7 +72,7 @@ const Login: React.FC = () => {
         </div>
 
         {/* Title */}
-        <h1 className="mb-2 text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+        <h1 className="mb-2 text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
           {t('loginTitle')}
         </h1>
         <p className="mb-8 text-sm text-slate-400">

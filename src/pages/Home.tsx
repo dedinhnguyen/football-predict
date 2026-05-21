@@ -255,7 +255,7 @@ const Home: React.FC = () => {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 text-white shadow-md glow-primary">
               <Trophy className="h-5 w-5" />
             </div>
-            <span className="text-lg font-bold tracking-wider bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent uppercase">
+            <span className="text-sm sm:text-lg font-bold tracking-wider bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent uppercase">
               {appSettings.appTitle}
             </span>
           </div>
@@ -267,25 +267,25 @@ const Home: React.FC = () => {
             {user.role === 'admin' && (
               <Link
                 to="/admin"
-                className="flex items-center gap-2 rounded-lg bg-purple-600/20 px-3 py-1.5 text-xs font-semibold text-purple-300 border border-purple-500/20 hover:bg-purple-600/30 transition-all duration-200"
+                className="flex items-center gap-2 rounded-lg bg-purple-600/20 px-2 sm:px-3 py-1.5 text-xs font-semibold text-purple-300 border border-purple-500/20 hover:bg-purple-600/30 transition-all duration-200"
               >
                 <LayoutDashboard className="h-4 w-4" />
-                <span>{t('adminPanel')}</span>
+                <span className="hidden sm:inline">{t('adminPanel')}</span>
               </Link>
             )}
 
             {/* User Profile */}
-            <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/5 px-3 py-1.5">
+            <div className="flex items-center gap-1.5 sm:gap-3 rounded-xl border border-white/5 bg-white/5 px-2 sm:px-3 py-1 sm:py-1.5">
               <img
                 src={user.avatarUrl || 'https://api.dicebear.com/7.x/bottts/svg'}
                 alt={user.displayName}
-                className="h-7 w-7 rounded-full border border-white/20 bg-slate-800"
+                className="h-6 w-6 sm:h-7 sm:w-7 rounded-full border border-white/20 bg-slate-800"
               />
               <div className="hidden text-left md:block">
                 <p className="text-xs font-semibold text-slate-200">{user.displayName}</p>
                 <p className="text-[10px] text-slate-400 font-mono capitalize">{user.role}</p>
               </div>
-              <div className="flex items-center gap-1 rounded bg-yellow-500/20 px-1.5 py-0.5 text-xs font-bold text-yellow-400 shadow-sm">
+              <div className="flex items-center gap-1 rounded bg-yellow-500/20 px-1 sm:px-1.5 py-0.5 text-[10px] sm:text-xs font-bold text-yellow-400 shadow-sm">
                 <Award className="h-3 w-3" />
                 <span>{user.totalPoints}{t('pointsUnit')}</span>
               </div>
@@ -294,11 +294,11 @@ const Home: React.FC = () => {
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
-              className="flex h-9 items-center justify-center gap-1.5 rounded-lg border border-white/5 bg-white/5 px-2.5 text-xs font-bold text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-all duration-200"
+              className="flex h-9 items-center justify-center gap-1 rounded-lg border border-white/5 bg-white/5 px-2 sm:px-2.5 text-xs font-bold text-slate-400 hover:bg-white/10 hover:text-slate-200 transition-all duration-200"
               title={language === 'vi' ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
             >
               <Globe className="h-4 w-4" />
-              <span>{language === 'vi' ? 'VI' : 'EN'}</span>
+              <span className="hidden sm:inline">{language === 'vi' ? 'VI' : 'EN'}</span>
             </button>
 
             {/* Theme Toggle */}
@@ -326,7 +326,7 @@ const Home: React.FC = () => {
       <main className="mx-auto max-w-5xl px-4 pt-10 md:px-8">
 
         {/* Welcome Board */}
-        <div className="glass-panel relative mb-10 rounded-2xl p-6 md:p-8 shadow-xl overflow-hidden">
+        <div className="glass-panel relative mb-6 md:mb-10 rounded-2xl p-5 md:p-8 shadow-xl overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-60" />
           <h2 className="text-xl font-extrabold text-white md:text-2xl">
             {t('predictFloorTitle')}
@@ -603,13 +603,13 @@ const Home: React.FC = () => {
                   <table className="w-full border-collapse text-left text-xs text-slate-300">
                     <thead>
                       <tr className="border-b border-white/10 bg-slate-950/80 sticky top-0 z-20 backdrop-blur-md">
-                        <th className="p-4 font-bold text-slate-200 uppercase tracking-wider w-12 text-center sticky left-0 bg-slate-950/90 z-30">
+                        <th className="px-2 sm:px-4 py-3 sm:py-4 font-bold text-slate-200 uppercase tracking-wider w-10 sm:w-12 text-center sticky left-0 bg-slate-950/90 z-30">
                           {t('thRank')}
                         </th>
-                        <th className="p-4 font-bold text-slate-200 uppercase tracking-wider min-w-[160px] sticky left-12 bg-slate-950/90 z-30 border-r border-white/5">
+                        <th className="px-2 sm:px-4 py-3 sm:py-4 font-bold text-slate-200 uppercase tracking-wider min-w-[110px] sm:min-w-[160px] sticky left-10 sm:left-12 bg-slate-950/90 z-30 border-r border-white/5">
                           {t('thMember')}
                         </th>
-                        <th className="p-4 font-bold text-slate-200 uppercase tracking-wider text-center w-24 border-r border-white/5">
+                        <th className="px-2 sm:px-4 py-3 sm:py-4 font-bold text-slate-200 uppercase tracking-wider text-center w-20 sm:w-24 border-r border-white/5">
                           {t('thTotalPoints')}
                         </th>
                         {matches.map((match) => (
@@ -641,18 +641,18 @@ const Home: React.FC = () => {
                             className={`transition-colors hover:bg-white/[0.02] ${isMe ? 'bg-blue-500/5' : ''}`}
                           >
                             {/* Rank cell */}
-                            <td className="p-4 text-center font-bold sticky left-0 bg-slate-900/90 z-10">
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-center font-bold sticky left-0 bg-slate-900/90 z-10">
                               {rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`}
                             </td>
 
                             {/* Member profile cell */}
-                            <td className="p-4 sticky left-12 bg-slate-900/90 z-10 border-r border-white/5 flex items-center gap-2">
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 sticky left-10 sm:left-12 bg-slate-900/90 z-10 border-r border-white/5 flex items-center gap-1.5 sm:gap-2">
                               <img
                                 src={rowUser.avatarUrl || 'https://api.dicebear.com/7.x/bottts/svg'}
                                 alt=""
-                                className="h-6 w-6 rounded-full bg-slate-800 border border-white/10"
+                                className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-slate-800 border border-white/10"
                               />
-                              <span className="font-semibold text-slate-200 truncate max-w-[110px]" title={rowUser.displayName}>
+                              <span className="font-semibold text-slate-200 truncate max-w-[70px] sm:max-w-[110px]" title={rowUser.displayName}>
                                 {rowUser.displayName}
                               </span>
                               {isMe && (
@@ -661,8 +661,8 @@ const Home: React.FC = () => {
                             </td>
 
                             {/* Points cell */}
-                            <td className="p-4 text-center border-r border-white/5 font-bold text-slate-100">
-                              <span className="inline-flex items-center gap-1 rounded bg-yellow-500/10 px-2 py-0.5 text-xs text-yellow-400 border border-yellow-500/10">
+                            <td className="px-2 sm:px-4 py-3 sm:py-4 text-center border-r border-white/5 font-bold text-slate-100">
+                              <span className="inline-flex items-center gap-1 rounded bg-yellow-500/10 px-1 sm:px-2 py-0.5 text-xs text-yellow-400 border border-yellow-500/10">
                                 {rowUser.totalPoints}{t('pointsUnit')}
                               </span>
                             </td>
@@ -677,7 +677,7 @@ const Home: React.FC = () => {
                               const hidePrediction = !locked && !isMe;
 
                               let cellContent = '-';
-                              let cellClass = 'p-4 text-center border-r border-white/5 text-slate-500 font-mono text-[10px] ';
+                              let cellClass = 'px-2 sm:px-4 py-3 sm:py-4 text-center border-r border-white/5 text-slate-500 font-mono text-[10px] ';
                               let cellTooltip = undefined;
 
                               if (pred) {
