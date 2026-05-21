@@ -10,24 +10,24 @@ Tài liệu này tổng hợp toàn bộ các giai đoạn phát triển và log
   * Cài đặt và cấu hình **Tailwind CSS v4** với thiết kế Glassmorphic cao cấp (Dark Mode mặc định, sử dụng phông chữ Inter và các bóng đổ hiệu ứng chiều sâu).
 * **Quản lý trạng thái Auth (Firebase Authentication & Cloud Firestore)**:
   * Tích hợp SDK Firebase (`firebase`) để xử lý cả phần Xác thực (Auth) và Lưu trữ cơ sở dữ liệu (Firestore).
-  * Khởi tạo file cấu hình kết nối [firebase.ts](file:///d:/Predict%20Football/src/lib/firebase.ts) lấy biến môi trường từ tệp `.env.local`.
-  * Xây dựng [AuthContext.tsx](file:///d:/Predict%20Football/src/context/AuthContext.tsx) quản lý trạng thái đăng nhập thời gian thực thông qua Firebase `onAuthStateChanged`.
+  * Khởi tạo file cấu hình kết nối [firebase.ts](file:///e:/Ai%20dev%20github/football-predict/src/lib/firebase.ts) lấy biến môi trường từ tệp `.env.local`.
+  * Xây dựng [AuthContext.tsx](file:///e:/Ai%20dev%20github/football-predict/src/context/AuthContext.tsx) quản lý trạng thái đăng nhập thời gian thực thông qua Firebase `onAuthStateChanged`.
   * Tự động đồng bộ và khởi tạo hồ sơ người dùng trong collection `users` trên Firestore ngay trong lần đầu đăng nhập bằng **Google Account** (Sử dụng Popup đăng nhập `signInWithPopup` của Firebase Auth).
   * Lắng nghe cập nhật thông tin cá nhân của người dùng real-time từ collection `users` của Firestore qua hàm `onSnapshot` để đồng bộ điểm số và quyền admin tức thì.
-  * Xây dựng Component [ProtectedRoute.tsx](file:///d:/Predict%20Football/src/components/ProtectedRoute.tsx) để bảo vệ các tuyến đường yêu cầu xác thực người dùng và phân quyền quản trị viên (Admin).
+  * Xây dựng Component [ProtectedRoute.tsx](file:///e:/Ai%20dev%20github/football-predict/src/components/ProtectedRoute.tsx) để bảo vệ các tuyến đường yêu cầu xác thực người dùng và phân quyền quản trị viên (Admin).
 
 ---
 
 ## 🛠️ GIAI ĐOẠN 2: Dashboard cho Quản trị viên (Admin Dashboard)
 * **Xây dựng các Service tương tác Firestore**:
-  * [firebase.ts](file:///d:/Predict%20Football/src/lib/firebase.ts): Khởi tạo Firestore db sử dụng `getFirestore`.
-  * [matchService.ts](file:///d:/Predict%20Football/src/lib/services/matchService.ts): Xử lý CRUD trận đấu trong collection `matches` (`createMatch`, `deleteMatch`, `updateMatchStatus`).
-  * [settingsService.ts](file:///d:/Predict%20Football/src/lib/services/settingsService.ts): Quản lý cấu hình tiêu đề trang và ảnh nền chung của ứng dụng từ document `settings/app`.
+  * [firebase.ts](file:///e:/Ai%20dev%20github/football-predict/src/lib/firebase.ts): Khởi tạo Firestore db sử dụng `getFirestore`.
+  * [matchService.ts](file:///e:/Ai%20dev%20github/football-predict/src/lib/services/matchService.ts): Xử lý CRUD trận đấu trong collection `matches` (`createMatch`, `deleteMatch`, `updateMatchStatus`).
+  * [settingsService.ts](file:///e:/Ai%20dev%20github/football-predict/src/lib/services/settingsService.ts): Quản lý cấu hình tiêu đề trang và ảnh nền chung của ứng dụng từ document `settings/app`.
 * **Phân quyền người dùng & Bảo mật vai trò**:
   * Mặc định khi đăng ký tài khoản (đăng nhập lần đầu qua Google OAuth), tài khoản mới luôn được gán vai trò `user` (`role: 'user'`).
   * Chỉ Admin mới có quyền cấp quyền quản trị bằng cách truy cập trực tiếp vào Firestore Database Console và chỉnh sửa thuộc tính `role` của user tương ứng thành `'admin'`. Hoàn toàn không có tùy chọn tự thay đổi vai trò trên giao diện client để tránh lỗ hổng bảo mật.
 * **Giao diện trang Admin `/admin`**:
-  * [Admin.tsx](file:///d:/Predict%20Football/src/pages/Admin.tsx) được phân làm 3 module chính:
+  * [Admin.tsx](file:///e:/Ai%20dev%20github/football-predict/src/pages/Admin.tsx) được phân làm 3 module chính:
     1. **Quản lý trận đấu**: Xem danh sách trận đấu và điều phối trạng thái (`scheduled` -> `live` -> `completed`). Khi chuyển sang `completed`, hiển thị Modal nhập tỉ số và chọn đội thắng kèo.
     2. **Thêm trận đấu**: Form nhập tên đội, tỉ lệ chấp, ngày giờ thi đấu. Hỗ trợ tính năng kéo thả upload ảnh để **mã hóa sang Base64** hoặc dán URL ảnh trực tiếp.
     3. **Cấu hình ứng dụng**: Đổi tiêu đề ứng dụng và ảnh nền tổng thể. Toàn bộ người dùng trực tuyến sẽ được cập nhật giao diện ngay lập tức nhờ cơ chế lắng nghe real-time `onSnapshot` của Firestore.
@@ -36,7 +36,7 @@ Tài liệu này tổng hợp toàn bộ các giai đoạn phát triển và log
 
 ## 🎮 GIAI ĐOẠN 3: Sàn Dự Đoán cho Người dùng (Prediction Floor)
 * **Xử lý logic Đặt cược**:
-  * [predictionService.ts](file:///d:/Predict%20Football/src/lib/services/predictionService.ts): Lưu trữ dự đoán của user vào collection `predictions` với ID của document được đặt theo dạng ghép `${userId}_${matchId}` để đảm bảo không bị tạo trùng lặp và dễ dàng truy vấn.
+  * [predictionService.ts](file:///e:/Ai%20dev%20github/football-predict/src/lib/services/predictionService.ts): Lưu trữ dự đoán của user vào collection `predictions` với ID của document được đặt theo dạng ghép `${userId}_${matchId}` để đảm bảo không bị tạo trùng lặp và dễ dàng truy vấn.
   * **Giới hạn tối đa 2 lần sửa cược**: Tự động tăng biến đếm `modificationCount` khi cập nhật dự đoán. Chặn cập nhật từ phía client và throw lỗi nếu vượt quá 2 lần.
 * **Logic tự động khóa cược**:
   * Tính toán thời gian khóa cược linh hoạt dựa trên cấu hình số phút do Admin đặt (Ví dụ: trước giờ bóng lăn 15 phút) hoặc khi trận đấu được Admin bấm chuyển sang trạng thái `live` hay `completed`.
@@ -66,7 +66,7 @@ Tài liệu này tổng hợp toàn bộ các giai đoạn phát triển và log
 
 ## 🌎 GIAI ĐOẠN 5: Đa Ngôn Ngữ, Đồng Banh Tự Động & Nâng Cấp Trực Quan (Session 2)
 * **Đa Ngôn Ngữ (Multi-Language Support - VI/EN)**:
-  * Xây dựng [LanguageContext.tsx](file:///d:/Predict%20Football/src/context/LanguageContext.tsx) lưu trữ ngôn ngữ ở LocalStorage và hỗ trợ dịch động toàn bộ giao diện ở các trang `Login`, `Home`, và `Admin`.
+  * Xây dựng [LanguageContext.tsx](file:///e:/Ai%20dev%20github/football-predict/src/context/LanguageContext.tsx) lưu trữ ngôn ngữ ở LocalStorage và hỗ trợ dịch động toàn bộ giao diện ở các trang `Login`, `Home`, và `Admin`.
 * **Dự Đoán Hòa Có Điều Kiện & Nhãn "Hòa Kèo"**:
   * Ẩn nút "Hòa" ở các trận đấu có chấp bóng khác 0; nút Hòa chỉ xuất hiện khi tỷ lệ chấp là 0 (đồng banh).
   * Hiển thị nhãn chấp 0 là "Hòa Kèo" (VI) / "Draw Refund" (EN) trên giao diện.
@@ -74,13 +74,25 @@ Tài liệu này tổng hợp toàn bộ các giai đoạn phát triển và log
   * Thay thế nhãn dự đoán "Đúng/Sai" trong bảng Excel thành "Thắng/Thua" (VI) hoặc "Win/Loss" (EN).
   * Tối ưu hóa màu xanh và đỏ đậm của các lớp `.cell-thang` và `.cell-thua` trong `index.css` để đảm bảo độ tương phản cao, dễ nhìn trên cả Dark và Light mode.
 * **Tự Động Chuyển Trực Tiếp (Auto-Live Status)**:
-  * Thêm logic kiểm tra định kỳ mỗi 5 giây trong [Admin.tsx](file:///d:/Predict%20Football/src/pages/Admin.tsx) để tự động chuyển đổi trạng thái trận đấu từ `scheduled` sang `live` khi `now >= matchTime`.
+  * Thêm logic kiểm tra định kỳ mỗi 5 giây trong [Admin.tsx](file:///e:/Ai%20dev%20github/football-predict/src/pages/Admin.tsx) để tự động chuyển đổi trạng thái trận đấu từ `scheduled` sang `live` khi `now >= matchTime`.
 * **Khắc Phục Giao Diện Admin & Nút Nhập Liệu**:
   * Đồng bộ nền body và overlay mờ động theo theme để sửa lỗi chữ sáng đè lên nền sáng gây mờ/nhoè giao diện.
   * Tích hợp lớp `.admin-input` vào toàn bộ input, select, và modal của trang quản trị để hiển thị rõ ràng, sắc nét và cao cấp hơn.
 
 ---
 
+## 🚀 GIAI ĐOẠN 6: Đẩy Code Lên GitHub & Triển Khai Môi Trường Sản Xuất Vercel (Session 3)
+* **Đồng bộ mã nguồn lên GitHub**:
+  * Chuyển đổi liên kết git remote từ GitLab cũ sang kho lưu trữ GitHub chính thức: [https://github.com/dedinhnguyen/football-predict.git](https://github.com/dedinhnguyen/football-predict.git).
+  * Cập nhật thông tin Git Author cục bộ và đẩy toàn bộ lịch sử commit cùng trạng thái code hiện tại lên nhánh `main`.
+* **Cấu hình môi trường Cloud trên Vercel**:
+  * Liên kết thư mục cục bộ với dự án Vercel.
+  * Thiết lập đầy đủ 6 biến môi trường cấu hình SDK Firebase Client (`VITE_FIREBASE_*`) từ `.env.local` lên bảng điều khiển Vercel cho cả môi trường Production và Preview.
+  * Triển khai biên dịch và đóng gói hoàn tất. Dự án hoạt động chính thức tại tên miền: **[https://football-predict-lemon.vercel.app](https://football-predict-lemon.vercel.app)**.
+
+---
+
 ## 🛠️ Trạng thái biên dịch
-* Lệnh build `npm run build` đã chạy thành công 100% không có lỗi.
+* Lệnh build `npm run build` đã chạy thành công 100% không có lỗi trên cả máy cục bộ và máy chủ build của Vercel.
+
 
