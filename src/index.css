@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@layer base {
+  :root {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.75rem;
+
+    --bg-grad-1: hsla(253,16%,7%,1);
+    --bg-grad-2: hsla(225,39%,10%,1);
+    --bg-grad-3: hsla(339,49%,7%,1);
+    --glass-bg: rgba(10, 12, 22, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.05);
+  }
+
+  .light {
+    --background: 210 40% 96%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 92%;
+    --muted-foreground: 215.4 16.3% 40%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --bg-grad-1: hsla(220, 30%, 96%, 1);
+    --bg-grad-2: hsla(215, 25%, 92%, 1);
+    --bg-grad-3: hsla(210, 30%, 96%, 1);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.06);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-image: 
+      radial-gradient(at 0% 0%, var(--bg-grad-1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, var(--bg-grad-2) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, var(--bg-grad-3) 0, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+/* Glassmorphism premium utilities */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-panel-hover {
+  @apply transition-all duration-300 ease-out;
+}
+
+.glass-panel-hover:hover {
+  background: rgba(15, 18, 36, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Glow effects */
+.glow-primary {
+  box-shadow: 0 0 40px -5px rgba(59, 130, 246, 0.2);
+}
+
+.glow-success {
+  box-shadow: 0 0 40px -5px rgba(16, 185, 129, 0.2);
+}
+
+.glow-danger {
+  box-shadow: 0 0 40px -5px rgba(239, 68, 68, 0.2);
+}
+
+/* Custom Scrollbar for Excel Table */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 12, 22, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Light theme semantic overrides */
+.light .text-white {
+  color: rgb(15, 23, 42) !important; /* slate-900 */
+}
+.light .text-slate-100 {
+  color: rgb(15, 23, 42) !important;
+}
+.light .text-slate-200 {
+  color: rgb(30, 41, 59) !important; /* slate-800 */
+}
+.light .text-slate-300 {
+  color: rgb(51, 65, 85) !important; /* slate-700 */
+}
+.light .text-slate-400 {
+  color: rgb(71, 85, 105) !important; /* slate-600 */
+}
+.light .text-slate-500 {
+  color: rgb(100, 116, 139) !important; /* slate-500 */
+}
+
+/* Background overrides */
+.light .bg-slate-950 {
+  background-color: rgb(241, 245, 249) !important; /* slate-100 */
+}
+.light .bg-slate-900 {
+  background-color: rgb(226, 232, 240) !important; /* slate-200 */
+}
+.light .bg-slate-800 {
+  background-color: rgb(203, 213, 225) !important; /* slate-300 */
+}
+.light .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+.light .bg-white\/\[0\.02\] {
+  background-color: rgba(0, 0, 0, 0.015) !important;
+}
+.light .bg-white\/\[0\.01\] {
+  background-color: rgba(0, 0, 0, 0.008) !important;
+}
+.light .border-white\/5 {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+.light .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Special cases */
+.light .bg-yellow-500\/20 {
+  background-color: rgba(234, 179, 8, 0.15) !important;
+}
+.light .text-yellow-400 {
+  color: rgb(161, 98, 7) !important; /* darker yellow/gold for readability in light mode */
+}
+.light .text-blue-400 {
+  color: rgb(29, 78, 216) !important; /* darker blue */
+}
+.light .text-purple-400 {
+  color: rgb(109, 40, 217) !important; /* darker purple */
+}
+.light .text-purple-300 {
+  color: rgb(124, 58, 237) !important;
+}
+.light .bg-purple-600\/20 {
+  background-color: rgba(147, 51, 234, 0.1) !important;
+}
+.light .bg-blue-500\/5 {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+.light .bg-blue-600 {
+  background-color: rgb(37, 99, 235) !important;
+  color: white !important;
+}
+.light .bg-slate-950\/80 {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+}
+.light .bg-slate-900\/90 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+.light .bg-slate-950\/90 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+}
+
+/* Gradients and specific elements */
+.light .bg-gradient-to-r.from-white.to-slate-400,
+.light .bg-gradient-to-r.from-white.via-slate-200.to-slate-400 {
+  background-image: linear-gradient(to right, rgb(15, 23, 42), rgb(51, 65, 85)) !important;
+}
+.light .glass-panel button.bg-white {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Excel spreadsheet cell win/loss contrast classes */
+.cell-thang {
+  background-color: rgba(16, 185, 129, 0.25) !important; /* emerald bg */
+  color: rgb(52, 211, 153) !important; /* bright green for dark mode */
+  font-weight: bold !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+.light .cell-thang {
+  background-color: rgba(16, 185, 129, 0.35) !important; /* more opaque bg */
+  color: rgb(4, 120, 87) !important; /* dark green text for light mode */
+  font-weight: bold !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+}
+
+.cell-thua {
+  background-color: rgba(239, 68, 68, 0.25) !important; /* red bg */
+  color: rgb(248, 113, 113) !important; /* bright red for dark mode */
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+.light .cell-thua {
+  background-color: rgba(239, 68, 68, 0.35) !important;
+  color: rgb(185, 28, 28) !important; /* dark red text for light mode */
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+}
+
+/* Premium Input styling for Admin panel */
+.admin-input {
+  background-color: rgba(15, 23, 42, 0.65) !important; /* bg-slate-900/65 */
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important; /* slate-50 */
+}
+.admin-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+.light .admin-input {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #0f172a !important; /* slate-900 */
+}
+.light .admin-input::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Badge text color contrast overrides in light mode */
+.light .text-red-400 {
+  color: rgb(185, 28, 28) !important;
+}
+.light .text-emerald-400 {
+  color: rgb(4, 120, 87) !important;
+}
+
+
