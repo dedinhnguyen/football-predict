@@ -11,9 +11,10 @@ Trong Session 3, chúng ta tập trung vào việc đưa ứng dụng lên môi 
    - Chuyển đổi Remote Git từ GitLab cũ sang GitHub mới: `https://github.com/dedinhnguyen/football-predict.git`.
    - Cập nhật thông tin cục bộ của tác giả (author name và email) tương thích với lịch sử commit của dự án để đảm bảo tính đồng bộ và quản lý mã nguồn chuẩn chỉ.
    - Đẩy toàn bộ mã nguồn hiện tại lên nhánh `main` của repository GitHub.
-2. **Vercel Cloud Deployment**:
+2. **Vercel Cloud Deployment & Troubleshooting**:
    - Khởi tạo liên kết dự án cục bộ với nền tảng Vercel (`dinhde1221-8522s-projects/football-predict`).
-   - Cập nhật cấu hình môi trường cloud bằng cách nhập toàn bộ 6 biến cấu hình Firebase Client SDK từ tệp `.env.local` cục bộ sang bảng cấu hình biến môi trường của Vercel (áp dụng đồng thời cho cả môi trường `production` và `preview`).
+   - **Xử lý sự cố thiếu biến môi trường**: Ban đầu lệnh nhập chuỗi biến môi trường trong PowerShell bị ngắt quãng dẫn đến thiếu các biến Firestore cốt lõi (`VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`), khiến ứng dụng gặp lỗi `Failed to get document because the client is offline`.
+   - **Khắc phục**: Đã bổ sung đầy đủ cả 6 biến môi trường của Firebase Client SDK lên Vercel Production và tiến hành deploy lại dự án để Vite cập nhật cấu hình mới.
    - Triển khai thành công ứng dụng web lên máy chủ Vercel với tên miền chính thức: **[https://football-predict-lemon.vercel.app](https://football-predict-lemon.vercel.app)**.
 
 ---
