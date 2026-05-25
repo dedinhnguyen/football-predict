@@ -13,6 +13,7 @@ export interface UserProfile {
   role: 'user' | 'admin';
   totalPoints: number;
   createdAt?: any;
+  isGuest?: boolean;
 }
 
 interface AuthContextType {
@@ -21,6 +22,7 @@ interface AuthContextType {
   loading: boolean;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  continueAsGuest: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -110,7 +112,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Đảm bảo tắt loading nếu snapshot listener chậm phản hồi
         setTimeout(() => setLoading(false), 2000);
       } else {
-        setUser(null);
+        const isGuest = sessionStorage.getItem('is_guest') === 'true';
+        if (isGuest) {
+          const savedLang = localStorage.getItem('language') || 'vi';
+          setUser({
+            uid: 'guest',
+            email: 'guest@predictfootball.local',
+            displayName: savedLang === 'vi' ? 'Khách' : 'Guest',
+            avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=guest',
+            role: 'user',
+            totalPoints: 0,
+            isGuest: true
+          });
+        } else {
+          setUser(null);
+        }
         setLoading(false);
       }
     };
@@ -131,6 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = async () => {
     try {
       setLoading(true);
+      sessionStorage.removeItem('is_guest');
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error("Lỗi đăng nhập Google với Firebase:", error);
@@ -139,10 +156,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const continueAsGuest = () => {
+    sessionStorage.setItem('is_guest', 'true');
+    const savedLang = localStorage.getItem('language') || 'vi';
+    setUser({
+      uid: 'guest',
+      email: 'guest@predictfootball.local',
+      displayName: savedLang === 'vi' ? 'Khách' : 'Guest',
+      avatarUrl: 'https://api.dicebear.com/7.x/bottts/svg?seed=guest',
+      role: 'user',
+      totalPoints: 0,
+      isGuest: true
+    });
+    setLoading(false);
+  };
+
   const logout = async () => {
     try {
       setLoading(true);
+      sessionStorage.removeItem('is_guest');
       await signOut(auth);
+      setUser(null);
     } catch (error) {
       console.error("Lỗi đăng xuất với Firebase:", error);
       setLoading(false);
@@ -151,7 +185,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, firebaseUser, loading, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, firebaseUser, loading, loginWithGoogle, logout, continueAsGuest }}>
       {children}
     </AuthContext.Provider>
   );

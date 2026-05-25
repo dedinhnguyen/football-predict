@@ -4,35 +4,35 @@ service cloud.firestore {
     
     // Quy tắc cho bảng users
     match /users/{userId} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if request.auth != null && request.auth.uid == userId;
     }
     
     // Quy tắc cho bảng matches
     match /matches/{matchId} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
     // Quy tắc cho bảng predictions
     match /predictions/{predId} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if request.auth != null && 
         request.resource.data.userId == request.auth.uid;
     }
     
     // Quy tắc cho bảng settings
     match /settings/{docId} {
-      allow read: if request.auth != null;
+      allow read: if true;
       allow write: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
-    // Cho phép đọc/ghi toàn bộ cơ sở dữ liệu đối với người dùng đã đăng nhập.
-    // Tránh giới hạn số lần gọi get() trong rules (tối đa 20 lần) khi thực hiện 
-    // transaction cập nhật hàng loạt điểm số của người chơi.
+    // Cho phép đọc toàn bộ cơ sở dữ liệu đối với khách và người dùng,
+    // nhưng ghi chỉ cho phép đối với người dùng đã đăng nhập.
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read: if true;
+      allow write: if request.auth != null;
     }
   }
 }

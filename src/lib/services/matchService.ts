@@ -147,3 +147,72 @@ export const updateMatchStatus = async (
     throw error;
   }
 };
+
+// Chỉnh sửa tỷ số & đội thắng kèo của trận đấu đã kết thúc và tự động điều chỉnh điểm số người dùng
+export const editCompletedMatchResult = async (
+  matchId: string,
+  newResult: { homeScore: number; awayScore: number; winningKeeo: 'home' | 'away' | 'draw' }
+) => {
+  try {
+    const matchDocRef = doc(db, 'matches', matchId);
+
+    // 1. Lấy tất cả dự đoán cho trận đấu này
+    const predictionsQuery = query(collection(db, 'predictions'), where('matchId', '==', matchId));
+    const predictionsSnap = await getDocs(predictionsQuery);
+    
+    const predictionDocs: any[] = [];
+    predictionsSnap.forEach((docSnap) => {
+      predictionDocs.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    // 2. Chạy transaction nguyên tử
+    await runTransaction(db, async (transaction) => {
+      const matchSnap = await transaction.get(matchDocRef);
+      if (!matchSnap.exists()) {
+        throw new Error("Trận đấu không tồn tại");
+      }
+      
+      const matchInfo = matchSnap.data();
+      if (matchInfo.status !== 'completed') {
+        throw new Error("Trận đấu chưa được hoàn thành");
+      }
+
+      const oldResult = matchInfo.result;
+      const oldWinningKeeo = oldResult?.winningKeeo;
+
+      // Cập nhật kết quả trận đấu
+      transaction.update(matchDocRef, {
+        result: newResult
+      });
+
+      // Điều chỉnh điểm số của người dùng
+      for (const pred of predictionDocs) {
+        const wasCorrect = oldWinningKeeo ? (pred.predictedChoice === oldWinningKeeo) : false;
+        const isNowCorrect = pred.predictedChoice === newResult.winningKeeo;
+        const predDocRef = doc(db, 'predictions', pred.id);
+
+        transaction.update(predDocRef, {
+          isCorrect: isNowCorrect
+        });
+
+        const userDocRef = doc(db, 'users', pred.userId);
+
+        if (wasCorrect && !isNowCorrect) {
+          // Trừ đi 1 điểm do đoán sai kết quả mới
+          transaction.update(userDocRef, {
+            totalPoints: increment(-1)
+          });
+        } else if (!wasCorrect && isNowCorrect) {
+          // Cộng thêm 1 điểm do đoán đúng kết quả mới
+          transaction.update(userDocRef, {
+            totalPoints: increment(1)
+          });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Lỗi khi chỉnh sửa kết quả trận đấu:", error);
+    throw error;
+  }
+};
+

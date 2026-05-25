@@ -26,6 +26,11 @@ const translations = {
     loginErrorDesc: 'Hãy đảm bảo các thông số Firebase và Supabase trong file .env.local đã được điền chính xác, và dịch vụ Google Sign-In đã được bật trên Firebase Console.',
     loginButton: 'Tiếp tục với Google',
     loginTerms: 'Hệ thống bảo mật bởi Google Firebase Authentication. Bằng cách đăng nhập, bạn đồng ý tham gia cuộc đua dự đoán của chúng tôi.',
+    or: 'Hoặc',
+    loginGuestBtn: 'Xem với vai trò Khách',
+    guestRole: 'Khách',
+    loginRequireAlert: 'Vui lòng đăng nhập tài khoản Google để thực hiện dự đoán!',
+    signInBtn: 'Đăng nhập',
 
     // Tabs
     tabPredictFloor: 'Sàn Dự Đoán',
@@ -36,7 +41,7 @@ const translations = {
 
     // Home - Predict Panel
     predictFloorTitle: 'Sàn Dự Đoán Tỉ Số ⚽',
-    predictFloorDesc: 'Chọn đội bóng bạn tin là sẽ thắng sau khi đã tính tỷ lệ kèo chấp. Cược sẽ tự động khóa trước khi bóng lăn {lockTime} phút hoặc khi Admin đặt trận đấu sang trực tiếp. Bạn được phép sửa đổi tối đa 2 lần.',
+    predictFloorDesc: 'Chọn đội bóng bạn tin là sẽ thắng sau khi đã tính tỷ lệ kèo chấp. Chọn đội sẽ tự động khóa trước khi bóng lăn {lockTime} phút hoặc khi Admin đặt trận đấu sang trực tiếp. Bạn được phép sửa đổi tối đa 2 lần.',
     matchListTitle: 'Danh sách các trận đấu',
     noMatches: 'Chưa có trận đấu nào được tạo trên hệ thống.',
     createMatchHere: 'Tạo trận đấu mới tại đây',
@@ -45,6 +50,8 @@ const translations = {
     matchStatusCompleted: 'Kết thúc',
     handicapLabel: 'Chấp {val}',
     hoaKeoLabel: 'Hòa Kèo',
+    updating: 'Đang cập nhật',
+
 
     // Prediction Choices & Status
     choiceHome: 'Đội Nhà',
@@ -60,25 +67,27 @@ const translations = {
     yourChoiceLabel: 'Lựa chọn của bạn',
     choiceHomeTitle: 'Đội nhà',
     choiceAwayTitle: 'Đội khách',
-    choiceDrawTitle: 'Hòa cược',
+    choiceDrawTitle: 'Hòa tỷ số',
     noPredictionMade: 'Bạn không tham gia dự đoán trận đấu này.',
-    lockedBetTime: 'Đã khóa cược (Trận đấu đang diễn ra hoặc đã sát giờ)',
-    lockedBetLimit: 'Đã khóa cược (Hết lượt sửa cược tối đa)',
+    awaitingResult: 'Chờ cập nhật kết quả',
+    lockedBetTime: 'Đã khóa đặt đội (Trận đấu đang diễn ra hoặc đã sát giờ)',
+
+    lockedBetLimit: 'Đã khóa đặt đội (Hết lượt sửa đổi tối đa)',
     modificationCountLabel: 'Lượt chỉnh sửa',
-    modificationLimitTip: 'Cược được sửa tối đa 2 lần',
+    modificationLimitTip: 'Đặt đội được chỉnh sửa tối đa 2 lần',
 
     // Excel Leaderboard
     spreadsheetTitle: 'Bảng điểm Spreadsheet thời gian thực',
     legendWin: 'Thắng (+1đ)',
     legendLoss: 'Thua (0đ)',
     legendPlaced: 'Đã đặt (Đang chờ)',
-    legendNotPlaced: 'Chưa cược / Ẩn cược',
+    legendNotPlaced: 'Chưa chọn / Ẩn chọn',
     thRank: 'Hạng',
     thMember: 'Thành viên',
     thTotalPoints: 'Tổng điểm',
     tooltipPredictedHome: 'Dự đoán: Đội nhà thắng',
     tooltipPredictedAway: 'Dự đoán: Đội khách thắng',
-    tooltipPredictedDraw: 'Dự đoán: Hòa cược',
+    tooltipPredictedDraw: 'Dự đoán: Hòa tỷ số',
 
     // Win/Loss display
     winCellText: 'Thắng',
@@ -128,7 +137,7 @@ const translations = {
     settingsHeader: 'Cấu hình chung ứng dụng',
     settingsAppTitle: 'Tiêu đề ứng dụng (App Title)',
     settingsLockTime: 'Số phút khóa dự đoán trước trận',
-    settingsLockTimeTooltip: 'Hệ thống tự động khóa không cho user đặt cược X phút trước khi trận đấu chính thức bắt đầu.',
+    settingsLockTimeTooltip: 'Hệ thống tự động khóa không cho user đặt X phút trước khi trận đấu chính thức bắt đầu.',
     settingsMinutesUnit: 'PHÚT',
     settingsBgImage: 'Ảnh nền ứng dụng (Background Image)',
     settingsPreviewBg: 'Xem trước ảnh nền',
@@ -152,7 +161,40 @@ const translations = {
     modalConfirmBtn: 'Xác nhận & Trả điểm',
     modalCompletingMsg: 'Đang cộng điểm...',
     modalSuccessMsg: 'Đã kết thúc trận đấu và tự động cập nhật điểm thành công!',
-    modalErrorMsg: 'Lỗi khi cập nhật kết quả trận đấu: '
+    modalErrorMsg: 'Lỗi khi cập nhật kết quả trận đấu: ',
+    liveStatusError: 'Lỗi khi chuyển trạng thái Live!',
+    btnEdit: 'Sửa',
+    modalHeaderEdit: 'Sửa kết quả & Cập nhật lại điểm',
+    modalConfirmBtnEdit: 'Xác nhận & Cập nhật lại',
+    modalEditingMsg: 'Đang cập nhật lại điểm...',
+    modalSuccessMsgEdit: 'Đã sửa kết quả và tự động điều chỉnh điểm thành công!',
+
+    // Onboarding Tour
+    tourWelcomeTitle: 'Chào mừng bạn! 👋',
+    tourWelcomeDesc: 'Chào mừng bạn đến với Football Predict! Hãy cùng dành 1 phút để xem qua hướng dẫn sử dụng hệ thống nhé.',
+    tourTickerTitle: 'Thông tin Cảnh báo 📢',
+    tourTickerDesc: 'Lưu ý quan trọng: Trang web được tạo ra hoàn toàn phục vụ mục đích giải trí, KHÔNG cổ súy cá cược trái phép dưới mọi hình thức.',
+    tourPointsTitle: 'Điểm số của bạn 🏆',
+    tourPointsDesc: 'Đây là tổng điểm tích lũy từ các dự đoán chính xác của bạn. Mỗi dự đoán đúng được +1 điểm, đoán sai hoặc không đặt sẽ được 0 điểm.',
+    tourTabsTitle: 'Chuyển đổi khu vực 🔄',
+    tourTabsDesc: 'Dễ dàng chuyển đổi qua lại giữa Sàn Dự Đoán để đặt hoặc Bảng Xếp Hạng Excel để theo dõi điểm số thời gian thực.',
+    tourWelcomeBoardTitle: 'Quy định chọn đội ⏰',
+    tourWelcomeBoardDesc: 'Chọn đội thắng sẽ tự động khóa trước khi trận đấu chính thức bắt đầu 15 phút (hoặc theo cấu hình của hệ thống), hoặc khi quản trị viên chuyển trạng thái trận đấu sang Trực Tiếp.',
+    tourFirstMatchTitle: 'Trận đấu & Tỷ lệ chấp ⚽',
+    tourFirstMatchDesc: 'Hiển thị thông tin hai đội bóng, thời gian thi đấu và tỷ lệ chấp Handicap (chấp trái). Lựa chọn của bạn sẽ được so sánh với tỷ lệ chấp này để tính kết quả thắng thua.',
+    tourPredictionButtonsTitle: 'Lựa chọn đội 🎯',
+    tourPredictionButtonsDesc: 'Nhấp chọn Đội Nhà, Đội Khách hoặc Hòa để gửi dự đoán. Nút lựa chọn sẽ chuyển sang màu xanh dương khi dự đoán đã được hệ thống ghi nhận thành công.',
+    tourModTrackerTitle: 'Giới hạn chỉnh sửa 🛡️',
+    tourModTrackerDesc: 'Mỗi trận đấu bạn chỉ được phép thay đổi lựa chọn tối đa 2 lần. Số lượt sửa hiện tại sẽ được đếm trực quan tại đây.',
+    tourSpreadsheetTitle: 'Bảng xếp hạng Excel 📊',
+    tourSpreadsheetDesc: 'Bảng điểm Spreadsheet mô phỏng thời gian thực, cập nhật tự động vị trí xếp hạng cùng lịch sử dự đoán của tất cả thành viên trong nhóm.',
+    tourSpreadsheetSecurityTitle: 'Bảo mật đặt công bằng 🔒',
+    tourSpreadsheetSecurityDesc: 'Để tránh tình trạng sao chép đặt đội, hệ thống sẽ ẩn lựa chọn của các thành viên khác bằng biểu tượng khóa 🔒 cho đến khi trận đấu chính thức bắt đầu.',
+    tourManualTriggerTitle: 'Xem lại hướng dẫn ❓',
+    tourManualTriggerDesc: 'Bạn luôn có thể nhấp vào biểu tượng dấu hỏi này trên Header để xem lại hướng dẫn hướng dẫn này bất cứ lúc nào.',
+    tourBtnPrev: 'Trước',
+    tourBtnNext: 'Tiếp theo',
+    tourBtnDone: 'Hoàn thành'
   },
   en: {
     // Header & Info
@@ -177,6 +219,11 @@ const translations = {
     loginErrorDesc: 'Please ensure your Firebase credentials and variables are correct and Google Sign-In is enabled in the Firebase Console.',
     loginButton: 'Continue with Google',
     loginTerms: 'Secured by Google Firebase Authentication. By logging in, you agree to join our prediction competition.',
+    or: 'Or',
+    loginGuestBtn: 'Continue as Guest',
+    guestRole: 'Guest',
+    loginRequireAlert: 'Please log in with Google to submit predictions!',
+    signInBtn: 'Sign In',
 
     // Tabs
     tabPredictFloor: 'Predict Floor',
@@ -196,6 +243,8 @@ const translations = {
     matchStatusCompleted: 'Completed',
     handicapLabel: 'Handicap {val}',
     hoaKeoLabel: 'Draw Refund',
+    updating: 'Updating',
+
 
     // Prediction Choices & Status
     choiceHome: 'Home Team',
@@ -213,6 +262,7 @@ const translations = {
     choiceAwayTitle: 'Away Team',
     choiceDrawTitle: 'Draw prediction',
     noPredictionMade: 'You did not predict this match.',
+    awaitingResult: 'Awaiting actual score',
     lockedBetTime: 'Predictions locked (Match in progress or near kickoff)',
     lockedBetLimit: 'Predictions locked (Modification limit reached)',
     modificationCountLabel: 'Modifications',
@@ -303,7 +353,40 @@ const translations = {
     modalConfirmBtn: 'Confirm & Payout',
     modalCompletingMsg: 'Processing payout...',
     modalSuccessMsg: 'Match completed and points distributed successfully!',
-    modalErrorMsg: 'Error updating match results: '
+    modalErrorMsg: 'Error updating match results: ',
+    liveStatusError: 'Error setting match to Live!',
+    btnEdit: 'Edit',
+    modalHeaderEdit: 'Edit Result & Recalculate Points',
+    modalConfirmBtnEdit: 'Confirm & Recalculate',
+    modalEditingMsg: 'Recalculating...',
+    modalSuccessMsgEdit: 'Match result edited and points recalculated successfully!',
+
+    // Onboarding Tour
+    tourWelcomeTitle: 'Welcome! 👋',
+    tourWelcomeDesc: 'Welcome to Football Predict! Let\'s take a quick 1-minute tour to get familiar with the platform.',
+    tourTickerTitle: 'Disclaimer Banner 📢',
+    tourTickerDesc: 'Important notice: This site is built for entertainment purposes only and does NOT encourage illegal sports betting.',
+    tourPointsTitle: 'Your Points 🏆',
+    tourPointsDesc: 'This is your accumulated score. Each correct prediction earns +1 point; wrong or unplaced predictions earn 0 points.',
+    tourTabsTitle: 'Switch Sections 🔄',
+    tourTabsDesc: 'Easily switch between the Predict Floor (to place predictions) and the Excel Leaderboard (to track rankings in real-time).',
+    tourWelcomeBoardTitle: 'Prediction Timing ⏰',
+    tourWelcomeBoardDesc: 'Predictions automatically lock 15 minutes (or custom system time) before kickoff, or when the Admin changes the match status to Live.',
+    tourFirstMatchTitle: 'Match & Handicap ⚽',
+    tourFirstMatchDesc: 'Displays team details, match time, and the Handicap ratio. Your prediction will be calculated against this handicap to determine the payout.',
+    tourPredictionButtonsTitle: 'Place Prediction 🎯',
+    tourPredictionButtonsDesc: 'Click Home, Away, or Draw to submit your prediction. The selected choice turns blue once successfully saved.',
+    tourModTrackerTitle: 'Modification Limit 🛡️',
+    tourModTrackerDesc: 'You can modify your prediction up to 2 times per match. The modification counter keeps track of your changes.',
+    tourSpreadsheetTitle: 'Excel Leaderboard Grid 📊',
+    tourSpreadsheetDesc: 'A live spreadsheet simulating Excel grids, automatically updating rankings and prediction records for all group members.',
+    tourSpreadsheetSecurityTitle: 'Fair Play Security 🔒',
+    tourSpreadsheetSecurityDesc: 'To prevent copying, other users\' selections are hidden with a lock 🔒 icon until the match kickoff.',
+    tourManualTriggerTitle: 'Replay Guide ❓',
+    tourManualTriggerDesc: 'You can click this help icon in the header to replay this onboarding tour at any time.',
+    tourBtnPrev: 'Back',
+    tourBtnNext: 'Next',
+    tourBtnDone: 'Done'
   }
 };
 

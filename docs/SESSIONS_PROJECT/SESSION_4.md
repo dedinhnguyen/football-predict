@@ -1,54 +1,76 @@
-# Nhật Ký Phát Triển & Bản Thiết Kế Hệ Thống - SESSION 4 (Tối Ưu Hóa Responsive Layout)
+# Nhật Ký Phát Triển & Bản Thiết Kế Hệ Thống - SESSION 4 (Hướng Dẫn Người Dùng & Chế Độ Khách - Guest Mode)
 
-Tài liệu này tổng hợp toàn bộ các thay đổi về giao diện thích ứng (Responsive UI), tối ưu hóa trải nghiệm trên các thiết bị di động, máy tính bảng (tablet, iPad) và quy trình triển khai phiên bản mới lên Vercel.
+Tài liệu này tổng hợp toàn bộ các thay đổi kiến trúc, quy tắc bảo mật dữ liệu, giao diện người dùng và sửa lỗi phân quyền khi đăng nhập/đăng xuất được thực hiện trong **Session 4**.
 
 ---
 
-## 🏗️ Tổng Quan Thay Đổi Kiến Trúc & Thiết Kế Giao Diện
+## 🏗️ Tổng Quan Thay Đổi Kiến Trúc & Tính Năng Mới
 
-Trong Session 4, chúng ta tập trung vào việc tinh chỉnh giao diện người dùng để đảm bảo hiển thị hoàn hảo trên mọi kích thước màn hình mà không phá vỡ bố cục thiết kế cao cấp:
+Trong Session 4, hệ thống tập trung nâng cao trải nghiệm người dùng mới thông qua tour hướng dẫn tương tác và mở rộng khả năng tiếp cận bằng chế độ Khách (Guest Mode) không cần đăng nhập:
 
-1. **Trang đăng nhập (Login Page)**:
-   - Điều chỉnh khoảng đệm (padding) của thẻ Glassmorphism từ `p-8` cố định thành `p-6 sm:p-8` linh hoạt.
-   - Thu nhỏ kích thước tiêu đề chính từ `text-3xl` xuống `text-2xl sm:text-3xl` trên màn hình nhỏ.
+1. **Tour Hướng Dẫn Tương Tác Người Dùng (Driver.js Tour)**:
+   - Tích hợp thư viện `driver.js` để xây dựng chuỗi hướng dẫn từng bước (10 bước) giúp người mới làm quen với các khu vực chính của ứng dụng: Logo, Warning Banner, Điểm số, Tab dự đoán, Trận đấu mẫu, Bộ đếm lượt sửa cược, Tab bảng xếp hạng Excel, Cột bảng xếp hạng và nút kích hoạt thủ công.
+   - Xây dựng hook custom [useAppTour.ts](file:///d:/Predict%20Football/src/hooks/useAppTour.ts) để quản lý luồng chạy tour, tự động chuyển đổi ViewMode (`predict` <-> `leaderboard`) tương ứng với đối tượng đang được giới thiệu.
+   - Tự động chạy tour trong lần đầu tiên người dùng đăng nhập hợp lệ và hiển thị giao diện chính. Cho phép chạy lại thủ công qua nút Hỏi đáp ở Header.
+   - Đồng bộ hóa phong cách Glassmorphism của Tour popover trong file CSS [index.css](file:///d:/Predict%20Football/src/index.css).
 
-2. **Trang chủ & Bảng xếp hạng Excel (Home & Leaderboard)**:
-   - **Thanh Header**: Thu nhỏ tiêu đề ứng dụng (`text-sm sm:text-lg`), ẩn nhãn chữ của nút chuyển đổi ngôn ngữ (`hidden sm:inline`) chỉ giữ lại biểu tượng trên di động.
-   - **Hồ sơ cá nhân**: Rút gọn các khoảng cách và kích thước nút chuyển sang trang Admin.
-   - **Bảng xếp hạng Excel (Excel Spreadsheet Leaderboard)**:
-     - Khắc phục sự cố chồng chéo cột khi cuộn ngang do cơ chế `sticky` định vị sai lệch: Cột Hạng (`Rank`) thu hẹp từ `w-12` xuống `w-10 sm:w-12` và cột Thành viên (`Member`) có điểm neo `left-12` được cấu hình lại thành `left-10 sm:left-12` để khớp chính xác với độ rộng của cột trước đó.
-     - Cột Thành viên được thu gọn chiều rộng tối thiểu (`min-w-[110px] sm:min-w-[160px]`) và giới hạn độ rộng hiển thị chữ (`max-w-[70px] sm:max-w-[110px]`) kèm hiệu ứng cắt ngắn chữ (`truncate`) để ngăn chặn việc phá vỡ cấu trúc lưới.
-     - Giảm khoảng cách đệm ô bảng (`px-2 sm:px-4 py-3 sm:py-4`) giúp hiển thị được nhiều cột trận đấu hơn.
+2. **Chế Độ Xem Với Vai Trò Khách (Guest Mode)**:
+   - Thêm tùy chọn "Xem với vai trò Khách" (Continue as Guest) tại màn hình [Login.tsx](file:///d:/Predict%20Football/src/pages/Login.tsx) thông qua một nút dạng Glassmorphic tinh tế.
+   - Triển khai Quản lý phiên khách ảo trong [AuthContext.tsx](file:///d:/Predict%20Football/src/context/AuthContext.tsx) bằng `sessionStorage` (`is_guest = 'true'`).
+   - Tài khoản Khách ảo sẽ có: `uid: 'guest'`, tên hiển thị là "Khách" hoặc "Guest" tùy theo ngôn ngữ hiện tại, avatar robot tự động từ Dicebear, vai trò `'user'`, và `totalPoints: 0`.
+   - Bảo vệ giao diện Sàn Dự Đoán: Khóa tương tác (`disabled`, giảm opacity xuống `40%`, con trỏ `not-allowed`) đối với các nút dự đoán trận đấu để Khách không thể nhấp cược. Ẩn hoàn toàn bộ đếm lượt sửa đổi cược của trận đấu.
+   - Hiển thị banner cảnh báo màu vàng tại trang chủ yêu cầu đăng nhập nếu người dùng đang ở vai trò Khách.
+   - Hiển thị nút "Đăng nhập" (Sign In) nổi bật màu xanh dương tại Header thay thế cho nút Logout để người chơi dễ dàng liên kết tài khoản Google thực sự bất kỳ lúc nào.
 
-3. **Bảng điều khiển Quản trị (Admin Panel)**:
-   - **Thanh điều hướng tab**: Rút gọn khoảng cách và ẩn nhãn chữ trên các tab chức năng ở chế độ màn hình dọc di động.
-   - **Danh sách trận đấu**: Giảm kích thước vùng chứa thông tin đội bóng (`w-20 sm:w-28`) và thu nhỏ ảnh logo cùng kích cỡ chữ.
-   - **Thao tác hành động**: Ẩn văn bản hiển thị trên các nút hành động "Trực tiếp" (Live) và "Hoàn tất" (Complete) trên màn hình nhỏ, thay vào đó hiển thị chế độ rút gọn chỉ bao gồm biểu tượng hành động (icon-only), tăng tính gọn gàng cho bảng.
-   - **Form & Modal**: Tinh chỉnh lại khoảng đệm các form thêm trận đấu, form cấu hình và modal kết thúc trận đấu từ `p-8` hoặc `p-6` xuống `p-5` để vừa vặn hơn với khung nhìn hẹp.
+3. **Sửa Lỗi Phân Quyền Firestore Khi Đăng Nhập & Chuyển Đổi Trạng Thái**:
+   - **Hiện tượng**: Khi Khách nhấp vào nút "Đăng nhập" ở Header (gọi hàm `logout()` giải phóng session khách ảo và gọi `signOut(auth)` của Firebase), hệ thống ném ra lỗi `FirebaseError: Missing or insufficient permissions` tại listener người dùng trực tuyến.
+   - **Nguyên nhân**: Khi Auth state chuyển dịch về `null` trước khi trang `Home` hoàn thành unmount, các listener realtime Firestore vẫn đang active (do dependency array là `[]` hoặc `[viewMode]` không phụ thuộc vào `user`) dẫn tới việc Firestore tự động đánh giá lại quyền với Token rỗng và bị từ chối bởi Firebase Security Rules.
+   - **Cách xử lý**:
+     - Cập nhật dependency array của các hook `useEffect` thiết lập `onSnapshot` trong [Home.tsx](file:///d:/Predict%20Football/src/pages/Home.tsx) để phụ thuộc vào `user`.
+     - Thêm điều kiện dừng `if (!user) return;` ở đầu các hiệu ứng lắng nghe để hủy đăng ký subscription cũ khi user đăng xuất.
+     - Lọc bỏ và in ra cảnh báo mang tính hướng dẫn (`console.warn`) giải thích rõ lỗi `'permission-denied'` và nhắc nhở lập trình viên cập nhật, triển khai rules mới. Điều này giúp gỡ lỗi dễ dàng nếu người dùng chưa cập nhật rules trên Cloud Firestore Console.
+     - Thay đổi quy tắc trong [firestore.rules](file:///d:/Predict%20Football/firestore.rules) cho phép đọc công khai dữ liệu (`allow read: if true;`) đối với các bảng `users`, `matches`, `predictions`, và `settings` để khách có thể xem bảng xếp hạng và trận đấu một cách hợp lệ, đồng thời bảo vệ nghiêm ngặt quyền ghi (`allow write: if request.auth != null && ...`). Để thay đổi này có hiệu lực trên môi trường đám mây thực tế, lập trình viên cần triển khai (deploy) tệp quy tắc này lên Firebase Console.
 
 ---
 
 ## 🛠️ Danh Sách Các File Đã Được Tạo / Cập Nhật
 
-### 1. [Login.tsx](file:///e:/Ai%20dev%20github/football-predict/src/pages/Login.tsx) `[MODIFY]`
-- Thay đổi padding và font size tiêu đề để tối ưu hiển thị trên thiết bị di động màn hình hẹp.
+### 1. [firestore.rules](file:///d:/Predict%20Football/firestore.rules) `[MODIFY]`
+- Thay đổi điều kiện đọc dữ liệu từ `allow read: if request.auth != null;` sang `allow read: if true;` đối với toàn bộ các collections (`users`, `matches`, `predictions`, `settings`).
+- Giữ nguyên các quy tắc ghi dữ liệu chặt chẽ để chống gian lận.
 
-### 2. [Home.tsx](file:///e:/Ai%20dev%20github/football-predict/src/pages/Home.tsx) `[MODIFY]`
-- Tối ưu hóa thanh tiêu đề và cấu hình định vị tuyệt đối `sticky left` cho các cột cố định trong bảng Excel Leaderboard nhằm đảm bảo không bị lệch vị trí khi cuộn ngang trên di động.
+### 2. [Home.tsx](file:///d:/Predict%20Football/src/pages/Home.tsx) `[MODIFY]`
+- Bổ sung `user` vào dependency array của tất cả bộ lắng nghe realtime (settings, matches, users, all predictions) để kích hoạt cơ chế dọn dẹp (cleanup unsubscribe) khi người dùng thay đổi trạng thái đăng nhập.
+- Thêm kiểm tra `if (!user) return;` ở đầu mỗi listener.
+- Chặn ghi log console các lỗi có mã `'permission-denied'` trong `onSnapshot`.
+- Ẩn/Hiện các chức năng đặt cược, bộ đếm số lần sửa cược, header profile và nút đăng nhập tương ứng cho Khách ảo.
 
-### 3. [Admin.tsx](file:///e:/Ai%20dev%20github/football-predict/src/pages/Admin.tsx) `[MODIFY]`
-- Cải thiện bố cục bảng danh sách trận đấu của quản trị viên, ẩn bớt text của các nút điều khiển trạng thái trận đấu trên thiết bị di động, điều chỉnh padding của các form cài đặt/thêm trận đấu và modal kết thúc.
+### 3. [AuthContext.tsx](file:///d:/Predict%20Football/src/context/AuthContext.tsx) `[MODIFY]`
+- Khai báo thêm hàm `continueAsGuest` thiết lập trạng thái phiên ảo khách vào `sessionStorage`.
+- Tự động duy trì trạng thái Khách ảo khi tải lại trang nếu cờ `is_guest` tồn tại.
+- Đồng bộ dọn dẹp cờ phiên ảo khách khi gọi `logout()`.
 
----
+### 4. [LanguageContext.tsx](file:///d:/Predict%20Football/src/context/LanguageContext.tsx) `[MODIFY]`
+- Thêm các nhãn dịch tiếng Việt và tiếng Anh phục vụ cho giao diện Khách:
+  - `loginGuestBtn` ("Xem với vai trò Khách" / "Continue as Guest")
+  - `loginRequireAlert` ("Vui lòng đăng nhập tài khoản Google để thực hiện dự đoán!" / "Please log in with Google to submit predictions!")
+  - `signInBtn` ("Đăng nhập" / "Sign In")
+  - `or` ("Hoặc" / "Or")
 
-## 🔒 Quy Tắc Phân Quyền / Bảo Mật
+### 5. [Login.tsx](file:///d:/Predict%20Football/src/pages/Login.tsx) `[MODIFY]`
+- Tích hợp nút "Xem với vai trò Khách" với biểu tượng `User` của `lucide-react`.
 
-- Các quy tắc bảo mật của hệ thống được giữ nguyên trạng từ Firestore Security Rules đã thiết lập.
-- Việc truy cập trang quản trị vẫn được bảo vệ nghiêm ngặt qua [ProtectedRoute.tsx](file:///e:/Ai%20dev%20github/football-predict/src/components/ProtectedRoute.tsx), kiểm tra vai trò `admin` real-time từ Firestore trước khi cho phép kết xuất dữ liệu.
+### 6. [useAppTour.ts](file:///d:/Predict%20Football/src/hooks/useAppTour.ts) `[NEW]`
+- Hook quản lý thư viện `driver.js` để thực hiện tour hướng dẫn tương tác 10 bước cho thành viên mới.
+
+### 7. [index.css](file:///d:/Predict%20Football/src/index.css) `[MODIFY]`
+- Thêm lớp CSS tùy chỉnh `.glass-driver-popover` và `.driver-popover-arrow` để làm đẹp popover của `driver.js` theo phong cách Dark Glassmorphism chung của toàn bộ trang web.
 
 ---
 
 ## 🚀 Định Hướng Phát Triển Tiếp Theo
 
-1. **Auto-refresh cache**: Tối ưu hóa việc tải dữ liệu trận đấu khi có sự thay đổi từ Admin, tránh việc load lại toàn bộ danh sách không cần thiết.
-2. **PWA (Progressive Web App)**: Cân nhắc tích hợp Service Worker để biến ứng dụng thành một PWA, cho phép người dùng cài đặt lên màn hình điện thoại giống như một ứng dụng native, nâng cao trải nghiệm người dùng trên thiết bị di động.
+1. **Lazy Loading Các Component Nặng**:
+   - Thực hiện code-splitting đối với trang Admin và trang Leaderboard để tối ưu hóa kích thước bundle tải lần đầu cho người dùng thông thường và Guest.
+2. **Hệ Thống Lưu Lịch Sử Dự Đoán Offline**:
+   - Cho phép người chơi Khách lưu trữ tạm thời các dự đoán cược nháp vào `localStorage` của trình duyệt, hiển thị nút "Đồng bộ" để tự động gửi các cược nháp này lên Firestore ngay sau khi họ quyết định Đăng nhập bằng Google.
